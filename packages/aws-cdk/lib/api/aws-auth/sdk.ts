@@ -54,6 +54,7 @@ export interface ISDK {
   lambda(): AWS.Lambda;
   cloudFormation(): AWS.CloudFormation;
   ec2(): AWS.EC2;
+  eks(): AWS.EKS;
   iam(): AWS.IAM;
   ssm(): AWS.SSM;
   s3(): AWS.S3;
@@ -163,6 +164,10 @@ export class SDK implements ISDK {
 
   public ec2(): AWS.EC2 {
     return this.wrapServiceErrorHandling(new AWS.EC2(this.config));
+  }
+
+  public eks(): AWS.EKS {
+    return this.wrapServiceErrorHandling(new AWS.EKS(this.config));
   }
 
   public iam(): AWS.IAM {

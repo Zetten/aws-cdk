@@ -5,6 +5,7 @@ export * from './context/load-balancer';
 export * from './context/availability-zones';
 export * from './context/endpoint-service-availability-zones';
 export * from './context/security-group';
+export * from './context/eks-cluster';
 export * from './context/key';
 export * from './cloud-artifact';
 import './cloud-artifact-aug';

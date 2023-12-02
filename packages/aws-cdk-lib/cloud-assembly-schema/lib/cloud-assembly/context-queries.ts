@@ -55,6 +55,11 @@ export enum ContextProvider {
   KEY_PROVIDER = 'key-provider',
 
   /**
+   * EKS Cluster provider
+   */
+  EKS_CLUSTER_PROVIDER = 'eks-cluster-provider',
+
+  /**
    * A plugin provider (the actual plugin name will be in the properties)
    */
   PLUGIN = 'plugin',
@@ -479,6 +484,35 @@ export interface KeyContextQuery {
 }
 
 /**
+ * Query input for looking up an EKS cluster
+ */
+export interface EksClusterContextQuery {
+  /**
+   * Query account
+   */
+  readonly account: string;
+
+  /**
+   * Query region
+   */
+  readonly region: string;
+
+  /**
+   * The ARN of the role that should be used to look up the missing values
+   *
+   * @default - None
+   */
+  readonly lookupRoleArn?: string;
+
+  /**
+   * EKS cluster name
+   *
+   * @default - None
+   */
+  readonly eksClusterName: string;
+}
+
+/**
  * Query input for plugins
  *
  * This alternate branch is necessary because it needs to be able to escape all type checking
@@ -510,5 +544,6 @@ export type ContextQueryProperties = AmiContextQuery
 | LoadBalancerListenerContextQuery
 | SecurityGroupContextQuery
 | KeyContextQuery
+| EksClusterContextQuery
 | PluginContextQuery;
 

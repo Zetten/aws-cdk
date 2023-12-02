@@ -24,7 +24,21 @@ import * as iam from '../../aws-iam';
 import * as kms from '../../aws-kms';
 import * as lambda from '../../aws-lambda';
 import * as ssm from '../../aws-ssm';
-import { Annotations, CfnOutput, CfnResource, IResource, Resource, Stack, Tags, Token, Duration, Size } from '../../core';
+import * as cxschema from '../../cloud-assembly-schema/index';
+import {
+  Annotations,
+  CfnOutput,
+  CfnResource,
+  IResource,
+  Resource,
+  Stack,
+  Tags,
+  Token,
+  Duration,
+  Size,
+  ContextProvider,
+} from '../../core';
+import * as cxapi from '../../cx-api/index';
 
 // defaults are based on https://eksctl.io
 const DEFAULT_CAPACITY_COUNT = 2;
@@ -1232,6 +1246,18 @@ export interface IngressLoadBalancerAddressOptions extends ServiceLoadBalancerAd
  * The user is still required to create the worker nodes.
  */
 export class Cluster extends ClusterBase {
+  public static fromLookupByName(scope: Construct, id: string, clusterName: string): ICluster {
+    const clusterAttributes: cxapi.EksClusterContextResponse = ContextProvider.getValue(scope, {
+      provider: cxschema.ContextProvider.EKS_CLUSTER_PROVIDER,
+      props: {
+        eksClusterName: clusterName,
+      } as cxschema.EksClusterContextQuery,
+      dummyValue: undefined,
+    }).value;
+
+    return this.fromClusterAttributes(scope, id, clusterAttributes);
+  }
+
   /**
    * Import an existing cluster
    *
